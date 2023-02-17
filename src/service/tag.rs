@@ -42,6 +42,8 @@ pub async fn get(
 ) -> Result<JsonResponse<serializer::PostList>> {
     let conn = get_conn(&state);
 
+    model::Tag::get_by_id(conn, id).await?;
+
     let (models, total_page) = model::Post::get_list(
         conn,
         PostFor::Frontend,
