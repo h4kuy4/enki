@@ -2,6 +2,7 @@ use sea_orm::DatabaseConnection;
 
 use crate::middleware::state::State;
 
+pub mod category;
 pub mod manage;
 pub mod post;
 pub mod tag;

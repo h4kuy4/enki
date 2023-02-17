@@ -2,6 +2,7 @@
 
 pub mod prelude;
 
+pub mod cate_post_count;
 pub mod category;
 pub mod post;
 pub mod post_tag;

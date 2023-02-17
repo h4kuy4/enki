@@ -6,3 +6,4 @@ pub use super::tag::Tag;
 
 pub type PostList = List<Post>;
 pub type TagList = List<Tag>;
+pub type CateList = List<Category>;
