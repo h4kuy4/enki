@@ -5,7 +5,7 @@ pub mod v1 {
 
     pub fn init() -> Router {
         Router::new()
-            .route("/", get(service::post::list))
-            .route("/:id", get(service::post::get))
+            .route("/", get(service::tag::list))
+            .route("/:id", get(service::tag::get))
     }
 }

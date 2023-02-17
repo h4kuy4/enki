@@ -6,5 +6,6 @@ pub mod category;
 pub mod post;
 pub mod post_tag;
 pub mod tag;
+pub mod tag_post_count;
 
 pub use prelude::*;

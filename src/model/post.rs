@@ -62,7 +62,7 @@ impl Post {
 
         let post = post.one(conn).await?.ok_or(Error::new(
             "Post",
-            "Post Not Found",
+            "Post not found",
             ErrorType::PostNotFound,
         ))?;
 
@@ -86,7 +86,7 @@ impl Post {
 
         let page = match page {
             Some(page) => page,
-            None => 0,
+            None => 1,
         };
 
         let post = entity::Post::find();
@@ -232,10 +232,14 @@ impl Post {
     }
 
     pub async fn delete(conn: &DatabaseConnection, id: i32) -> Result<()> {
-        entity::PostTag::delete_many()
-            .filter(entity::post_tag::Column::PostId.eq(id))
-            .exec(conn)
-            .await?;
+        entity::Post::find_by_id(id)
+            .one(conn)
+            .await?
+            .ok_or(Error::new(
+                "Post",
+                "Post Not Found",
+                ErrorType::PostNotFound,
+            ))?;
 
         entity::Post::delete_by_id(id).exec(conn).await?;
 

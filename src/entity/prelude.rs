@@ -4,8 +4,10 @@ pub use super::category::Entity as Category;
 pub use super::post::Entity as Post;
 pub use super::post_tag::Entity as PostTag;
 pub use super::tag::Entity as Tag;
+pub use super::tag_post_count::Entity as TagPostCount;
 
 pub use super::category::Model as CategoryModel;
 pub use super::post::Model as PostModel;
 pub use super::post_tag::Model as PostTagModel;
 pub use super::tag::Model as TagModel;
+pub use super::tag_post_count::Model as TagPostCountModel;

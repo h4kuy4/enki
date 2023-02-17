@@ -5,3 +5,4 @@ pub use super::post::Post;
 pub use super::tag::Tag;
 
 pub type PostList = List<Post>;
+pub type TagList = List<Tag>;

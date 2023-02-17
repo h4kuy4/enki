@@ -8,21 +8,12 @@ pub struct Tag {
     pub name: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub post_count: Option<i32>,
+    pub post_count: Option<i64>,
 }
 
 impl Tag {
     pub fn serialize(model: model::Tag) -> Self {
         match model {
-            model::Tag::IdOnly { id: _ } => {
-                log::error!("Tag Serializer: Wrong model!");
-                panic!()
-            }
-            model::Tag::WithoutCount { id, name } => Self {
-                id,
-                name,
-                post_count: None,
-            },
             model::Tag::Full {
                 id,
                 name,
@@ -30,8 +21,12 @@ impl Tag {
             } => Self {
                 id,
                 name,
-                post_count: Some(post_count),
+                post_count,
             },
+            _ => {
+                log::error!("Wrong model!");
+                panic!()
+            }
         }
     }
 }
