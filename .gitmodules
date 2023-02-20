@@ -1,0 +1,3 @@
+[submodule "lib/treelight"]
+	path = lib/treelight
+	url = git@github.com:edg-l/treelight.git
