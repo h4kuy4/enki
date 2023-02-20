@@ -5,6 +5,9 @@ use serde::Deserialize;
 pub struct Config {
     pub listen_addr: String,
     pub database_url: String,
+    pub jwt_secret: String,
+    pub user_name: String,
+    pub password: String,
 }
 
 impl Config {

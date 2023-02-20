@@ -1,3 +1,4 @@
+pub use super::account::Account;
 pub use super::category::Category;
 pub use super::json::Json as JsonRequest;
 pub use super::list::List;

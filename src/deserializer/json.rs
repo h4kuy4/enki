@@ -1,7 +1,8 @@
 use axum::{
     async_trait,
-    extract::{FromRequest, RequestParts},
-    http::StatusCode,
+    body::HttpBody,
+    extract::FromRequest,
+    http::{Request, StatusCode},
     BoxError,
 };
 
@@ -12,19 +13,21 @@ use crate::Error;
 pub struct Json<T>(pub T);
 
 #[async_trait]
-impl<B, T> FromRequest<B> for Json<T>
+impl<S, B, T> FromRequest<S, B> for Json<T>
 where
-    B: axum::body::HttpBody + Send,
     T: DeserializeOwned,
+    B: Send + HttpBody + 'static,
     B::Data: Send,
     B::Error: Into<BoxError>,
+    S: Send + Sync,
 {
     type Rejection = (StatusCode, Error);
 
-    async fn from_request(req: &mut RequestParts<B>) -> Result<Self, Self::Rejection> {
-        match axum::Json::<T>::from_request(req).await {
-            Ok(value) => Ok(Self(value.0)),
-            Err(err) => Err((StatusCode::BAD_REQUEST, err.into())),
-        }
+    async fn from_request(req: Request<B>, state: &S) -> Result<Self, Self::Rejection> {
+        let axum::Json(payload) = axum::Json::<T>::from_request(req, state)
+            .await
+            .map_err(|err| (StatusCode::BAD_REQUEST, err.into()))?;
+
+        Ok(Json(payload))
     }
 }

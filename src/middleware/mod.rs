@@ -1,3 +1,4 @@
+pub mod auth;
 pub mod prelude;
 pub mod state;
 

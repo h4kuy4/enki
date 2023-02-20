@@ -63,8 +63,8 @@ pub async fn add(
 
 pub async fn update(
     Extension(state): Extension<Arc<State>>,
-    JsonRequest(payload): JsonRequest<deserializer::Tag>,
     Path(id): Path<i32>,
+    JsonRequest(payload): JsonRequest<deserializer::Tag>,
 ) -> Result<JsonResponse<serializer::ID>> {
     let conn = get_conn(&state);
 

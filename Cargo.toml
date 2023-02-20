@@ -6,12 +6,13 @@ edition = "2021"
 [workspace]
 member = [
     ".",
+    "lib/jwt-auth",
     "lib/treelight",
     "lib/md_it_treesitter",
 ]
 
 [dependencies]
-axum = "0.5.17"
+axum = {version="0.6.7", features = ["headers", "json"] }
 axum-extra = "0.4.2"
 axum-macros = "0.3.1"
 
@@ -29,7 +30,7 @@ treelight = {path="lib/treelight"}
 
 tower = "0.4.13"
 tower-http = { version = "0.3.5", features = ["cors"]}
-jsonwebtoken = "8.2.0"
+jwt-auth = {path="lib/jwt-auth"}
 
 log = "0.4.0"
 env_logger = "0.9.0"

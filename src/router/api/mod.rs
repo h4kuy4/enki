@@ -1,5 +1,6 @@
 use axum::Router;
 
+pub mod auth;
 pub mod category;
 pub mod manage;
 pub mod post;
@@ -12,7 +13,7 @@ pub fn init() -> Router {
 pub mod v1 {
     use axum::{routing::get, Router};
 
-    use super::{category, manage, post, tag};
+    use super::{auth, category, manage, post, tag};
 
     pub fn init() -> Router {
         Router::new()
@@ -21,8 +22,7 @@ pub mod v1 {
             .nest("/manage", manage::v1::init())
             .nest("/tag", tag::v1::init())
             .nest("/category", category::v1::init())
-        // .nest("/auth", auth::init())
+            .nest("/auth", auth::v1::init())
         // .nest("/comment", comment::init())
-        // .nest("/manage", manage::init())
     }
 }

@@ -73,7 +73,7 @@ impl IntoResponse for Error {
 impl From<axum::Error> for Error {
     fn from(e: axum::Error) -> Self {
         Error {
-            cause: "axum".to_string(),
+            cause: "Axum".to_string(),
             message: e.to_string(),
             err_type: ErrorType::ServerError,
         }
@@ -83,7 +83,7 @@ impl From<axum::Error> for Error {
 impl From<sea_orm::error::DbErr> for Error {
     fn from(e: sea_orm::error::DbErr) -> Self {
         Error {
-            cause: "database".to_string(),
+            cause: "Database".to_string(),
             message: e.to_string(),
             err_type: ErrorType::DbError,
         }
@@ -93,7 +93,7 @@ impl From<sea_orm::error::DbErr> for Error {
 impl From<config::ConfigError> for Error {
     fn from(e: config::ConfigError) -> Self {
         Error {
-            cause: "config".to_string(),
+            cause: "Config".to_string(),
             message: e.to_string(),
             err_type: ErrorType::ConfigError,
         }
@@ -103,7 +103,7 @@ impl From<config::ConfigError> for Error {
 impl From<axum::extract::rejection::JsonRejection> for Error {
     fn from(e: axum::extract::rejection::JsonRejection) -> Self {
         Error {
-            cause: "request".to_string(),
+            cause: "Request".to_string(),
             message: e.to_string(),
             err_type: ErrorType::RequestError,
         }
