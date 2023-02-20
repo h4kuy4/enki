@@ -6,8 +6,8 @@ use axum::{
 };
 
 use crate::{
-    deserializer::{self, JsonRequest},
-    middleware::state::State,
+    deserializer,
+    middleware::{JsonRequest, State},
     model::{self, PostFor, PostListType},
     serializer::{self, post::PostType, ID},
     Response, Result,

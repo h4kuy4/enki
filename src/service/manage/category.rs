@@ -6,8 +6,8 @@ use axum::{
 };
 
 use crate::{
-    deserializer::{self, JsonRequest},
-    middleware::state::State,
+    deserializer,
+    middleware::{JsonRequest, State},
     model,
     serializer::{self, ID},
     Response, Result,
@@ -63,8 +63,8 @@ pub async fn add(
 
 pub async fn update(
     Extension(state): Extension<Arc<State>>,
-    JsonRequest(payload): JsonRequest<deserializer::Category>,
     Path(id): Path<i32>,
+    JsonRequest(payload): JsonRequest<deserializer::Category>,
 ) -> Result<JsonResponse<serializer::ID>> {
     let conn = get_conn(&state);
 

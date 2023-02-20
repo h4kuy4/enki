@@ -3,8 +3,8 @@ use std::sync::Arc;
 use axum::{Extension, Json};
 
 use crate::{
-    deserializer::{self, JsonRequest},
-    middleware::{state::State, Claims},
+    deserializer,
+    middleware::{Claims, JsonRequest, State},
     model, serializer, Error, ErrorType, Response, Result,
 };
 
