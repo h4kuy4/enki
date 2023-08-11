@@ -4,6 +4,7 @@ use crate::middleware::state::State;
 
 pub mod auth;
 pub mod category;
+pub mod feed;
 pub mod friend;
 pub mod manage;
 pub mod post;
