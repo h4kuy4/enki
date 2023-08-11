@@ -43,7 +43,7 @@ pub async fn get(
 
     let models = models
         .into_iter()
-        .map(|model| serializer::Post::serialize(model).without_description())
+        .map(|model| serializer::Post::serialize(model).without_content())
         .collect();
 
     Ok(Json(Response::ok(serializer::PostList::from_vec(
