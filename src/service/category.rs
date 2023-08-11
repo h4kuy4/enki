@@ -5,13 +5,7 @@ use axum::{
     Extension, Json,
 };
 
-use crate::{
-    deserializer,
-    middleware::state::State,
-    model::{self, PostFor, PostListType},
-    serializer::{self, post::PostType},
-    Response, Result,
-};
+use crate::{deserializer, middleware::state::State, model, serializer, Response, Result};
 
 use super::get_conn;
 
@@ -44,18 +38,12 @@ pub async fn get(
 
     model::Category::get_by_id(conn, id).await?;
 
-    let (models, total_page) = model::Post::get_list(
-        conn,
-        PostFor::Frontend,
-        PostListType::ForCategory(id),
-        param.page_size,
-        param.page,
-    )
-    .await?;
+    let (models, total_page) =
+        model::Post::get_list_by_category(conn, id, param.page_size, param.page).await?;
 
     let models = models
         .into_iter()
-        .map(|model| serializer::Post::serialize(model, PostType::DescriptionOnly))
+        .map(|model| serializer::Post::serialize(model).without_content())
         .collect();
 
     Ok(Json(Response::ok(serializer::PostList::from_vec(

@@ -3,24 +3,21 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "category")]
+#[sea_orm(table_name = "friend")]
 pub struct Model {
-    #[sea_orm(primary_key)]
+    #[sea_orm(primary_key, auto_increment = false)]
     pub id: i32,
     #[sea_orm(column_type = "Text")]
     pub name: String,
+    #[sea_orm(column_type = "Text")]
+    pub description: String,
+    #[sea_orm(column_type = "Text")]
+    pub avatar_url: String,
+    #[sea_orm(column_type = "Text")]
+    pub url: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {
-    #[sea_orm(has_many = "super::post::Entity")]
-    Post,
-}
-
-impl Related<super::post::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Post.def()
-    }
-}
+pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}

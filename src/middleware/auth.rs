@@ -2,15 +2,14 @@ use std::fmt::Debug;
 use std::sync::Arc;
 
 use axum::response::IntoResponse;
-use axum::{async_trait, RequestPartsExt, TypedHeader};
+use axum::{TypedHeader};
 use axum::{
-    extract::{FromRequest, FromRequestParts},
     headers::{authorization::Bearer, Authorization},
-    http::{request::Parts, Request, StatusCode},
+    http::{Request, StatusCode},
     middleware::Next,
     Extension,
 };
-use jwt_auth::Jwt;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{Error, ErrorType};

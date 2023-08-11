@@ -9,6 +9,7 @@ member = [
     "lib/jwt-auth",
     "lib/treelight",
     "lib/md_it_treesitter",
+    "lib/md_it_custom_container",
 ]
 
 [dependencies]
@@ -26,6 +27,7 @@ serde_json = "1"
 
 markdown-it = "0.4.0"
 md_it_treesitter = {path="lib/md_it_treesitter"}
+md_it_custom_container = {path="lib/md_it_custom_container"}
 treelight = {path="lib/treelight"}
 
 tower = "0.4.13"
@@ -37,3 +39,4 @@ env_logger = "0.9.0"
 
 dotenv = "0.15"
 config = "0.11"
+rss = "2.0.5"
