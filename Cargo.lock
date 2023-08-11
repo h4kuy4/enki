@@ -628,6 +628,7 @@ dependencies = [
  "jwt-auth",
  "log",
  "markdown-it",
+ "md_it_custom_container",
  "md_it_treesitter",
  "sea-orm",
  "serde 1.0.152",
@@ -1197,6 +1198,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6365506850d44bff6e2fbcb5176cf63650e48bd45ef2fe2665ae1570e0f4b9ca"
 dependencies = [
  "digest",
+]
+
+[[package]]
+name = "md_it_custom_container"
+version = "0.1.0"
+dependencies = [
+ "markdown-it",
 ]
 
 [[package]]

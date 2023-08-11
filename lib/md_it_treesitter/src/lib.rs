@@ -41,7 +41,8 @@ impl CoreRule for TreeSitterRule {
     }
 }
 
-fn language_to_emum(language: String) -> Option<treelight::Language> {
+fn language_to_emum(language: &String) -> Option<treelight::Language> {
+    let language = language.trim();
     match language.to_lowercase().as_str() {
         "c" => Some(treelight::Language::C),
         "cpp" => Some(treelight::Language::Cpp),
@@ -79,12 +80,26 @@ pub fn render_html(code: Option<&str>, language: String) -> String {
         None => return "".to_string(),
     };
 
-    let language = match language_to_emum(language) {
+    let scope = match language_to_emum(&language) {
         Some(scope) => scope,
-        None => return format!("<pre><code>\n{}</pre></code>\n", code),
+        None => {
+            return format!(
+                "<pre><code>{}</code></pre>",
+                code.lines()
+                    .map(|line| format!("<span class=\"line\">{}</span>", line))
+                    .collect::<Vec<String>>()
+                    .join("\n")
+            )
+        }
     };
 
-    let html: String = treelight::highlight_to_html(language, code);
+    let html: String = treelight::highlight_to_html(scope, code);
 
-    format!("<pre><code>\n{}</pre></code>\n", html)
+    let html = html
+        .lines()
+        .map(|line| format!("<span class=\"line\">{}</span>", line))
+        .collect::<Vec<String>>()
+        .join("\n");
+
+    format!("<pre language=\"{}\"><code>{}</code></pre>", language, html)
 }

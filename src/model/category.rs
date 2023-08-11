@@ -6,30 +6,20 @@ use sea_orm::PaginatorTrait;
 
 use crate::deserializer;
 use crate::entity;
-use crate::entity::CatePostCountModel;
 use crate::entity::CategoryModel;
 use crate::Error;
 use crate::ErrorType;
 use crate::Result;
 
 #[derive(Debug)]
-pub enum Category {
-    Full {
-        id: i32,
-        name: String,
-        post_count: Option<i64>,
-    },
-    IdOnly {
-        id: i32,
-    },
-    NameOnly {
-        name: String,
-    },
+pub struct Category {
+    pub id: Option<i32>,
+    pub name: Option<String>,
 }
 
 impl Category {
     pub async fn get_by_id(conn: &DatabaseConnection, id: i32) -> Result<Category> {
-        let category = entity::CatePostCount::find_by_id(id)
+        let category = entity::Category::find_by_id(id)
             .one(conn)
             .await?
             .ok_or(Error::new(
@@ -56,7 +46,7 @@ impl Category {
             None => 1,
         };
 
-        let pages = entity::CatePostCount::find().paginate(conn, page_size);
+        let pages = entity::Category::find().paginate(conn, page_size);
         let page_num = pages.num_pages().await?;
         let tags = pages.fetch_page(page - 1).await?;
 
@@ -69,13 +59,11 @@ impl Category {
     }
 
     pub async fn insert(conn: &DatabaseConnection, model: Category) -> Result<i32> {
-        let name = match model {
-            Category::NameOnly { name } => name,
-            _ => {
-                log::error!("Category Model: Wrong model!");
-                panic!();
-            }
-        };
+        let name = model.name.ok_or(Error::new(
+            "Category",
+            "Category name is required",
+            ErrorType::RequestError,
+        ))?;
 
         let model = entity::category::ActiveModel {
             name: Set(name),
@@ -88,15 +76,13 @@ impl Category {
     }
 
     pub async fn update(conn: &DatabaseConnection, id: i32, model: Category) -> Result<i32> {
-        let name = match model {
-            Category::NameOnly { name } => name,
-            _ => {
-                log::error!("Category Model: Wrong model!");
-                panic!();
-            }
-        };
+        let name = model.name.ok_or(Error::new(
+            "Category",
+            "Category name is required",
+            ErrorType::RequestError,
+        ))?;
 
-        let mut act_model: entity::category::ActiveModel = entity::Category::find_by_id(id)
+        let mut active_model: entity::category::ActiveModel = entity::Category::find_by_id(id)
             .one(conn)
             .await?
             .ok_or(Error::new(
@@ -106,9 +92,9 @@ impl Category {
             ))?
             .into();
 
-        act_model.name = Set(name);
+        active_model.name = Set(name);
 
-        let model = act_model.update(conn).await?;
+        let model = active_model.update(conn).await?;
 
         Ok(model.id)
     }
@@ -127,55 +113,31 @@ impl Category {
 
         Ok(())
     }
-
-    pub fn from_id(id: i32) -> Self {
-        Self::IdOnly { id }
-    }
-
-    pub fn get_id(&self) -> i32 {
-        match &self {
-            Self::Full {
-                id,
-                name: _,
-                post_count: _,
-            } => id.to_owned(),
-            Self::IdOnly { id } => id.to_owned(),
-            Self::NameOnly { name: _ } => {
-                log::error!("ID feild not found.");
-                panic!()
-            }
-        }
-    }
 }
 
 impl From<CategoryModel> for Category {
     fn from(model: CategoryModel) -> Self {
-        Self::Full {
-            id: model.id,
-            name: model.name,
-            post_count: None,
+        Self {
+            id: Some(model.id),
+            name: Some(model.name),
         }
     }
 }
 
 impl From<i32> for Category {
     fn from(id: i32) -> Self {
-        Self::from_id(id)
-    }
-}
-
-impl From<CatePostCountModel> for Category {
-    fn from(model: CatePostCountModel) -> Self {
-        Self::Full {
-            id: model.id,
-            name: model.name,
-            post_count: Some(model.count),
+        Self {
+            id: Some(id),
+            name: None,
         }
     }
 }
 
 impl From<deserializer::Category> for Category {
     fn from(model: deserializer::Category) -> Self {
-        Self::NameOnly { name: model.name }
+        Self {
+            id: None,
+            name: Some(model.name),
+        }
     }
 }

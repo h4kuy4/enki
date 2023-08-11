@@ -4,8 +4,7 @@ use axum::{Extension, Json};
 
 use crate::{
     deserializer,
-    middleware::{Claims, JsonRequest, State},
-    model, serializer, Error, ErrorType, Response, Result,
+    middleware::{Claims, JsonRequest, State}, serializer, Error, ErrorType, Response, Result,
 };
 
 type JsonResponse<T> = Json<Response<T>>;

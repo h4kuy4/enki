@@ -8,9 +8,7 @@ use axum::{
 use crate::{
     deserializer,
     middleware::{JsonRequest, State},
-    model::{self, PostFor, PostListType},
-    serializer::{self, post::PostType, ID},
-    Response, Result,
+    model, serializer, Response, Result,
 };
 
 use super::get_conn;
@@ -23,18 +21,11 @@ pub async fn list(
 ) -> Result<JsonResponse<serializer::PostList>> {
     let conn = get_conn(&state);
 
-    let (model, total_page) = model::Post::get_list(
-        conn,
-        PostFor::Backend,
-        PostListType::Full,
-        param.page_size,
-        param.page,
-    )
-    .await?;
+    let (model, total_page) = model::Post::get_list(conn, param.page_size, param.page).await?;
 
     let model = model
         .into_iter()
-        .map(|model| serializer::Post::serialize(model, PostType::DescriptionOnly))
+        .map(|model| serializer::Post::serialize(model).without_content())
         .collect();
 
     Ok(Json(Response::ok(serializer::PostList::from_vec(
@@ -48,9 +39,9 @@ pub async fn get(
 ) -> Result<JsonResponse<serializer::Post>> {
     let conn = get_conn(&state);
 
-    let model = model::Post::get_by_id(conn, PostFor::Backend, id).await?;
+    let model = model::Post::get_by_id(conn, id).await?;
 
-    let model = serializer::Post::serialize(model, PostType::Full);
+    let model = serializer::Post::serialize(model);
 
     Ok(Json(Response::ok(model)))
 }
@@ -65,7 +56,7 @@ pub async fn add(
 
     let id = model::Post::insert(conn, model).await?;
 
-    Ok(Json(Response::ok(ID { id })))
+    Ok(Json(Response::ok(serializer::ID { id })))
 }
 
 pub async fn update(
@@ -79,7 +70,7 @@ pub async fn update(
 
     let id = model::Post::update(conn, id, model).await?;
 
-    Ok(Json(Response::ok(ID { id })))
+    Ok(Json(Response::ok(serializer::ID { id })))
 }
 
 pub async fn delete(
